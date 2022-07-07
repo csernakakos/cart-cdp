@@ -17,9 +17,24 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-    console.log("POSTING FORM...");
-    console.log(req.params);
-    console.log(req.body);
+
+    // Let's re-create the functionality of express.urlencoded() below:
+    // req.on() is similar to addEventListener: it fires when, in our case, data in chunks (that is, the HTTP request header in chunks and later on the HTTP request body in chunks) reaches the server.
+    req.on("data", data => {
+        console.log(data);
+        const parsedData = data.toString("utf8").split("&");
+        const formData = {};
+
+        for (let pair of parsedData) {
+            // const key = pair.split("=")[0];
+            // const value = pair.split("=")[1];
+            const [ key, value ] = pair.split("=");
+
+            formData[key] = value;
+            console.log(formData);
+        }
+
+    });
 
     res.send(`
     <p>You submitted ${req.body.email}</p>
