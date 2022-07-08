@@ -1,4 +1,5 @@
 import fs from "fs";
+import crypto from "crypto";
 
 class usersRepository {
     // constructor function is called instantly when a new instance of a class is created.
@@ -22,13 +23,68 @@ class usersRepository {
         );
     };
 
+    async create(attributes) {
+        attributes.id = this.randomId();
+        const records = await this.getAll();
+        records.push(attributes);
+
+        await this.writeAll(records);
+    }
+
+    async writeAll(records) {
+        await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2), {encoding: "utf8"});
+        // null and 2 ensure to pretty-print JSON instead of printing all records on one line.
+        // null: no custom formatters
+        // 2: the level of identation to use in the string we create
+    }
+
+    randomId() {
+        return crypto.randomBytes(7).toString("hex");
+    }
+
+    async getOne(id) {
+        const records = await this.getAll();
+        return records.find(rec => rec.id === id);
+    }
+
+    async delete(id) {
+        const records = await this.getAll();
+        const filteredRecords = records.filter(rec => rec.id !== id);
+
+        await this.writeAll(filteredRecords);
+    }
     
+    async update(id, attributes) {
+        const records = await this.getAll();
+        const record = records.find(rec => rec.id === id);
+
+        if (!record) {
+            throw new Error(`No such record with id ${id}`);
+        }
+
+        Object.assign(record, attributes);
+
+        await this.writeAll(records);
+    }
+
+    async getOneBy(filters) {
+        const records = await this.getAll();
+
+        for (let record of records) {
+            let found = true;
+
+            for (let key in filters) {
+                if (record[key] !== filters[key]) {
+                    found = false;
+                }
+            }
+
+            if (found) {
+                return record;
+            }
+        }
+    }
+
 };
 
-const test = async () => {
-    const repo = new usersRepository("users.json");
-    const users = await repo.getAll();
-    console.log(users); // This time, we get a JavaScript array
-}
-
-test(); 
+export default new usersRepository("users.json");
