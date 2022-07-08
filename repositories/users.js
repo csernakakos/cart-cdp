@@ -17,18 +17,12 @@ class usersRepository {
     }
 
     async getAll() {
-        // Open file
-        const contents = await fs.promises.readFile(this.filename, {encoding: "utf8"});
+        return JSON.parse(
+            await fs.promises.readFile(this.filename, {encoding: "utf8"})
+        );
+    };
 
-        // Read file contents
-        // console.log(contents); // This time, we get a string
-
-        // Parse file contents
-        const data = JSON.parse(contents);
-
-        // Return parsed data
-        return data;
-    }
+    
 };
 
 const test = async () => {
