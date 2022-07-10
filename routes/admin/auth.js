@@ -1,4 +1,5 @@
 import express from "express";
+import { check } from "express-validator";
 import usersRepo from "../../repositories/users.js";
 import signupTemplate from "../../views/admin/auth/signup.js";
 import signinTemplate from "../../views/admin/auth/signin.js";
@@ -9,7 +10,12 @@ router.get("/signup", (req, res) => {
     res.send(signupTemplate({ req }));
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", [
+    check("email"),
+    check("password"),
+    check("passwordConfirmation")
+
+], async (req, res) => {
     const { email, password, passwordConfirmation } = req.body;
 
     const existingUser = await usersRepo.getOneBy({ email });
