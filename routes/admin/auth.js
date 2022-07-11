@@ -1,8 +1,11 @@
 import express from "express";
-import { check } from "express-validator";
+import { check, validationResult } from "express-validator";
 import usersRepo from "../../repositories/users.js";
 import signupTemplate from "../../views/admin/auth/signup.js";
 import signinTemplate from "../../views/admin/auth/signin.js";
+import validators from "./validators.js";
+const { requireEmail, requirePassword, requirePasswordConfirmation } = validators;
+
 
 const router = express.Router();
 
@@ -10,32 +13,30 @@ router.get("/signup", (req, res) => {
     res.send(signupTemplate({ req }));
 });
 
-router.post("/signup", [
-    check("email"),
-    check("password"),
-    check("passwordConfirmation")
-
-], async (req, res) => {
-    const { email, password, passwordConfirmation } = req.body;
-
-    const existingUser = await usersRepo.getOneBy({ email });
+router.post("/signup",
+    [
+    requireEmail,
+    requirePassword,
+    requirePasswordConfirmation,
+    ],
     
-    if (existingUser) {
-        return res.send(`A user with the email ${email} already exists.`);
-    }
+    async (req, res) => {
+        const errors = validationResult(req);
 
-    if (password !== passwordConfirmation) {
-        return res.send(`Ensure that the passwords match.`)
-    }
+        if (!errors.isEmpty()) {
+            return res.send(signupTemplate({ req, errors }));
+        }
+
+        const { email, password } = req.body;
+        const user = await usersRepo.create({ email, password });
 
 
-    const user = await usersRepo.create({ email, password });
-    
-    req.session.userId = user.id;
+        
+        req.session.userId = user.id;
 
-    res.send(`
-    <p>You've created an account for: ${email}.</p>
-    `)
+        res.send(`
+        <p>You've created an account for: ${email}.</p>
+        `)
 });
 
 router.get("/signout", async (req, res) => {
