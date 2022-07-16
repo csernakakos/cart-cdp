@@ -13,4 +13,4 @@ app.use(cookieSession({
 
 app.use(authRouter);
 
-app.listen(5001, () => {});
+app.listen(5001, () => {console.log(`listening on http://localhost:5001/`)});
