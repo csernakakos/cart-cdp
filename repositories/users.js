@@ -4,7 +4,7 @@ import util from "util";
 import Repository from "./repository.js";
 const scrypt = util.promisify(crypto.scrypt);
 
-class usersRepository extends Repository {
+class UsersRepository extends Repository {
     async create(attributes) {
         attributes.id = this.randomId();
 
@@ -44,4 +44,4 @@ class usersRepository extends Repository {
     };
 };
 
-export default new usersRepository("users.json");
+export default new UsersRepository("users.json");

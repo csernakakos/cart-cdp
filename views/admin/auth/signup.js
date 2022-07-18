@@ -1,13 +1,5 @@
 import layout from "../layout.js";
-const getError = (errors, prop) => {
-    // prop === email || password || passwordConfirmation
-
-    try {
-        return errors.mapped()[prop].msg
-    } catch (error) {
-        return "";
-    }
-}
+import { getError } from "../../../views/helpers.js";
 
 const signup = ({ req, errors }) => {
     return layout({ template: `
