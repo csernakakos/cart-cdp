@@ -3,7 +3,7 @@ import { getError } from "../../helpers.js";
 
 export default ({ errors }) => {
     return layout({
-        content: `
+        template: `
             <form method="POST">
                 <input placeholder="Title" name="title" />
                 <input placeholder="Price" name="price" />

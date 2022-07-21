@@ -2,6 +2,15 @@ import { check } from "express-validator";
 import usersRepo from "../../repositories/users.js";
 
 const validators = {
+    requireTitle: check("title")
+        .trim()
+        .isLength({min: 5, max: 40})
+        .withMessage("Must be between 5 and 40 characters."),
+    requirePrice: check("price")
+        .trim()
+        .toFloat()
+        .isFloat({min: 1})
+        .withMessage("Must be a number greater than 1."),
     requireEmail: check("email")
         .trim()
         .normalizeEmail()
@@ -12,7 +21,7 @@ const validators = {
             if (existingUser) {
                 throw new Error("This email is already in use.")
             }
-        }),
+    }),
     requirePassword: check("password")
         .trim()
         .isLength({min: 4, max: 20 })
@@ -51,9 +60,6 @@ const validators = {
                 throw new Error("Wrong password");
             }
     }),
-
-
-    
 }
 
 export default validators;
