@@ -7,6 +7,8 @@ import productsRouter from "./routes/admin/products.js";
 dotenv.config({});
 
 const app = express();
+
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieSession({
     keys: [process.env.COOKIE_KEY],
