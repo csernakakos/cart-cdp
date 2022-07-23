@@ -4,12 +4,33 @@ import { getError } from "../../helpers.js";
 export default ({ errors }) => {
     return layout({
         template: `
-            <form method="POST">
-                <input placeholder="Title" name="title" />
-                <input placeholder="Price" name="price" />
-                <input type="file" name="image" />
-                <button>Submit</button>
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <h1 class="subtitle">Create Product</h1>
+
+                <form method="POST" enctype="multipart/form-data">
+                <div class="field">
+                    <label class="label">Title</label>
+                    <input placeholder="Title" name="title" />
+                    <p class="help is-danger">${getError(errors, "title")}</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Price</label>
+                    <input placeholder="Price" name="price" />
+                    <p class="help is-danger">${getError(errors, "price")}</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Image</label>
+                    <input type="file" name="image" />
+                </div>
+                <br />
+                <button class="button is-primary">Create</button>
             </form>
+            </div>
+        </div>
+           
         `
     })
 };
