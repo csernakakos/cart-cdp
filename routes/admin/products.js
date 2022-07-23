@@ -1,7 +1,8 @@
 import express from "express";
-import { validationResult } from "express-validator";
 import multer from "multer";
 
+import validatorFunctions from "./middlewares.js";
+const { handleErrors } = validatorFunctions;
 import productsRepo from "../../repositories/products.js";
 import productsNewTemplate from "../../views/admin/products/new.js";
 import validators from "./validators.js";
@@ -22,12 +23,8 @@ router.post("/admin/products/new",
     requireTitle,
     requirePrice,
     ],
+    handleErrors(productsNewTemplate),
 async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.send(productsNewTemplate({ errors }));
-    }
  
     const image = req.file.buffer.toString("base64");
     const { title, price } = req.body;

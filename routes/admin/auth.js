@@ -1,5 +1,7 @@
 import express from "express";
-import { check, validationResult } from "express-validator";
+
+import validatorFunctions from "./middlewares.js";
+const { handleErrors } = validatorFunctions;
 import usersRepo from "../../repositories/users.js";
 import signupTemplate from "../../views/admin/auth/signup.js";
 import signinTemplate from "../../views/admin/auth/signin.js";
@@ -19,19 +21,12 @@ router.post("/signup",
     requirePassword,
     requirePasswordConfirmation,
     ],
+    handleErrors(signupTemplate),
     
     async (req, res) => {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.send(signupTemplate({ req, errors }));
-        }
-
         const { email, password } = req.body;
         const user = await usersRepo.create({ email, password });
 
-
-        
         req.session.userId = user.id;
 
         res.send(`
@@ -53,13 +48,8 @@ router.post(`/signin`,
         requireEmailExists,
         requireValidPassword
     ],
-
+    handleErrors(signinTemplate),
     async (req, res) => {
-    const errors = validationResult(req);
-    
-    if (!errors.isEmpty()) {
-        return res.send(signinTemplate({ errors }));
-    }
     const { email } = req.body;
 
     const user = await usersRepo.getOneBy({ email });
