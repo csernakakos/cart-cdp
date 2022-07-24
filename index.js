@@ -2,7 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieSession from "cookie-session";
 import authRouter from "./routes/admin/auth.js";
-import productsRouter from "./routes/admin/products.js";
+import productsRouter from "./routes/products.js";
+import adminProductsRouter from "./routes/admin/products.js";
+import cartsRouter from "./routes/carts.js"
 
 dotenv.config({});
 
@@ -16,5 +18,7 @@ app.use(cookieSession({
 
 app.use(authRouter);
 app.use(productsRouter);
+app.use(adminProductsRouter);
+app.use(cartsRouter);
 
 app.listen(5001, () => {console.log(`listening on http://localhost:5001/`)});
