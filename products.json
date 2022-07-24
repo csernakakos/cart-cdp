@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "title": "Prod",
+    "price": 5,
+    "image": "vvs",
+    "id": "4rw"
+  },
+  {
+    "title": "Prod2",
+    "price": 54,
+    "image": "vvs",
+    "id": "4rerw"
+  },
+  {
+    "title": "akoska",
+    "price": 24,
+    "image": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=",
+    "id": "23854980367662"
+  }
+]

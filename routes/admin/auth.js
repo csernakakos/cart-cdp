@@ -29,9 +29,7 @@ router.post("/signup",
 
         req.session.userId = user.id;
 
-        res.send(`
-        <p>You've created an account for: ${email}.</p>
-        `)
+        res.redirect("/admin/products");
 });
 
 router.get("/signout", async (req, res) => {
@@ -56,7 +54,7 @@ router.post(`/signin`,
 
     req.session.userId = user.id;
 
-    res.send(`You're signed in! Your ID is ${req.session.userId}`);
+    res.redirect("/admin/products");
 });
 
 export default router;
